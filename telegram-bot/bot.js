@@ -28,4 +28,38 @@ bot.on('message', (msg) => {
 
   // send a message to the chat acknowledging receipt of their message
   bot.sendMessage(chatId, 'Received your message');
+
+  // Download Video command configuration
+  bot.onText(/\/dv (.+)/, (msg, match) => {
+    const chatId = msg.chat.id;
+    const url = match[1];
+  
+    if (isValidUrl(url)) {
+      bot.sendMessage(chatId, 'Processing video');
+    } else {
+      bot.sendMessage(chatId, 'The URL is not valid.');
+    }
+  });
+
+  // Download Audio command configuration
+  bot.onText(/\/da (.+)/, (msg, match) => {
+    const chatId = msg.chat.id;
+    const url = match[1];
+
+    if (isValidUrl(url)) {
+      bot.sendMessage(chatId, 'Processing audio');
+    } else {
+      bot.sendMessage(chatId, 'The URL is not valid.');
+    }
+  });
+
+  function isValidUrl(string) {
+    try {
+      new URL(string);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
 });
