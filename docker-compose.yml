@@ -4,14 +4,14 @@ services:
     container_name: node
     working_dir: /app
     volumes:
-      - .:/app
+      - ./telegram-bot:/app
     command: ["node", "server.js"]
     ports:
       - "5000:5000"
     networks:
       - app_network
   web:
-    image: httpd:latest
+    image: nginx:latest
     container_name: web
     networks:
       - app_network
