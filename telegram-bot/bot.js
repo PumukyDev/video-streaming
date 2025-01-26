@@ -41,18 +41,49 @@ bot.on('message', (msg) => {
     }
   });
 
-  // Download Audio command configuration
-  bot.onText(/\/da (.+)/, (msg, match) => {
+
+  const path = require('path');
+
+  // Matches "/da [url]"
+  bot.onText(/\/da (.+)/, async (msg, match) => {
     const chatId = msg.chat.id;
     const url = match[1];
 
     if (isValidUrl(url)) {
-      bot.sendMessage(chatId, 'Processing audio');
+      bot.sendMessage(chatId, 'Processing your audio...');
+
+      try {
+        const audioPath = await downloadAudio(url);
+        bot.sendMessage(chatId, 'Download complete!');
+      } catch (error) {
+        bot.sendMessage(chatId, "I can't download it, are you sure it's a valid youtube URL?");
+      }
     } else {
-      bot.sendMessage(chatId, 'The URL is not valid.');
+      bot.sendMessage(chatId, 'This is not a URL');
     }
   });
 
+  const { exec } = require('child_process');
+
+  // Helper function to download audio using yt-dlp
+  async function downloadAudio(url) {
+    return new Promise((resolve, reject) => {
+      const audioOutputPath = `downloads/${Date.now()}.mp3`;
+      const command = `yt-dlp -x --audio-format mp3 -o "${audioOutputPath}" ${url}`;
+
+      exec(command, (error, stdout, stderr) => {
+        if (error) {
+          reject(`Error running yt-dlp: ${stderr || error.message}`);
+          return;
+        }
+        console.log(stdout);
+        resolve(audioOutputPath);
+      });
+    });
+  }
+  
+
+  // Helper function to validate URLs
   function isValidUrl(string) {
     try {
       new URL(string);

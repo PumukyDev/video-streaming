@@ -5,6 +5,7 @@ services:
     working_dir: /app
     volumes:
       - ./telegram-bot:/app
+      - ./downloads:/app/downloads
     command: ["node", "server.js"]
     ports:
       - "5000:5000"
