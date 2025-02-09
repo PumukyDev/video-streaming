@@ -73,7 +73,7 @@ async function downloadAudio(url) {
 async function downloadVideo(url) {
   return new Promise((resolve, reject) => {
     const videoOutputPath = `downloads/${Date.now()}.mp4`;
-    const command = `yt-dlp -f "136" -o "${videoOutputPath}" ${url}`;
+    const command = `yt-dlp -f "136+140" -o "${videoOutputPath}" ${url}`;
 
     exec(command, (error, stdout, stderr) => {
       if (error) {
