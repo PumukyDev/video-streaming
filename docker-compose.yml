@@ -1,6 +1,7 @@
 services:
   node:
-    image: node:23.6.1-alpine3.20
+    build:
+      context: telegram-bot
     container_name: node
     working_dir: /app
     volumes:
