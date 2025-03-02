@@ -2,6 +2,7 @@ require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const { exec } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 // Get the Telegram Bot token from the .env file
 const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -55,19 +56,47 @@ bot.onText(/\/da (.+)/, async (msg, match) => {
 // Helper function to download audio using yt-dlp
 async function downloadAudio(url) {
   return new Promise((resolve, reject) => {
-    const audioOutputPath = `downloads/${Date.now()}.mp3`;
-    const command = `yt-dlp -x --audio-format mp3 -o "${audioOutputPath}" ${url}`;
+    const fileDate = `${Date.now()}`;
+    const audioOutputPath = `downloads/${fileDate}.mp3`;
+    const oggOutputPath = `downloads/${fileDate}.ogg`;
 
-    exec(command, (error, stdout, stderr) => {
+    // Download the audio in mp3
+    const downloadCommand = `yt-dlp -x --audio-format mp3 -o "${audioOutputPath}" ${url}`;
+
+    exec(downloadCommand, (error, stdout, stderr) => {
       if (error) {
         reject(`Error running yt-dlp: ${stderr || error.message}`);
         return;
       }
+
       console.log(stdout);
-      resolve(audioOutputPath);
+
+      // Convert mp3 file to ogg
+      const conversionCommand = `ffmpeg -i "${audioOutputPath}" -acodec libvorbis "${oggOutputPath}"`;
+
+      exec(conversionCommand, (convertError, convertStdout, convertStderr) => {
+        if (convertError) {
+          reject(`Error converting to ogg: ${convertStderr || convertError.message}`);
+          return;
+        }
+
+        console.log('Conversion successful:', convertStdout);
+
+        fs.appendFile('downloads/lista.txt', `/home/alumno/canciones/${fileDate}.ogg\n`, (err) => {
+          if (err) {
+            console.error('Error updating lista.txt:', err);
+          } else {
+            console.log('lista.txt updated with new audio:', oggOutputPath);
+          }
+        });
+
+        resolve(oggOutputPath);
+      });
     });
   });
 }
+
+
 
 // Helper function to download video using yt-dlp and convert to HLS
 async function downloadVideo(url) {
