@@ -7,7 +7,7 @@ services:
     volumes:
       - ./telegram-bot:/app
       - ./nginx/hls:/app/downloads
-    command: ["node", "server.js"]
+    command: ["node", "bot.js"]
     ports:
       - "5000:5000"
     networks:
@@ -45,7 +45,7 @@ services:
       - icecast
     volumes:
       - ./ices2/ices-playlist.xml:/etc/ices2/ices-playlist.xml
-      - ./nginx/hls:/home/alumno/canciones
+      - ./nginx/hls:/songs
     networks:
       - app_network
 

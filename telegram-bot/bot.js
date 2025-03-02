@@ -82,11 +82,11 @@ async function downloadAudio(url) {
 
         console.log('Conversion successful:', convertStdout);
 
-        fs.appendFile('downloads/lista.txt', `/home/alumno/canciones/${fileDate}.ogg\n`, (err) => {
+        fs.appendFile('downloads/list.txt', `/songs/${fileDate}.ogg\n`, (err) => {
           if (err) {
-            console.error('Error updating lista.txt:', err);
+            console.error('Error updating list.txt:', err);
           } else {
-            console.log('lista.txt updated with new audio:', oggOutputPath);
+            console.log('list.txt updated with new audio:', oggOutputPath);
           }
         });
 
@@ -95,8 +95,6 @@ async function downloadAudio(url) {
     });
   });
 }
-
-
 
 // Helper function to download video using yt-dlp and convert to HLS
 async function downloadVideo(url) {

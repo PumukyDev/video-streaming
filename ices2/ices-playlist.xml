@@ -1,46 +1,46 @@
 <?xml version="1.0"?>
 <ices>
-  <!-- Configuración de logging -->
+  <!-- Logging Configuration -->
   <logpath>/var/log/ices2</logpath>
   <logfile>ices.log</logfile>
   <loglevel>3</loglevel>
-  
-  <!-- Configuración del stream -->
+
+  <!-- Stream Configuration -->
   <stream>
     <metadata>
-      <name>Radio Trampa</name>
-      <genre>Pop</genre>
-      <description>Transmisión de audio en vivo</description>
+      <name>Pumuky's Radio</name>
+      <genre>Various</genre>
+      <description>Live audio stream from a Telegram bot</description>
     </metadata>
-    
+
     <input>
         <module>playlist</module>
         <param name="type">basic</param>
-        <param name="file">/home/alumno/canciones/lista.txt</param>
-        <!-- random play -->
+        <param name="file">/songs/list.txt</param>
+        <!-- Random play -->
         <param name="random">0</param>
-        <!-- si la lista de reproducción se actualiza, empieza desde el principio -->
+        <!-- If the playlist is updated, start from the beginning -->
         <param name="restart-after-reread">0</param>
-        <!-- si está configurado en 1, reproduce una vez y luego se detiene -->
+        <!-- If set to 1, play once and then stop -->
         <param name="once">0</param>
     </input>
-    
+
     <instance>
-      <!-- Datos para conectarse al servidor Icecast -->
+      <!-- Information to connect to the Icecast server -->
       <hostname>icecast</hostname>
       <port>8000</port>
       <password>hackme</password>
-      <!-- Mount point en el servidor Icecast -->
-      <mount>/supertramp</mount>
+      <!-- Mount point on the Icecast server -->
+      <mount>/radio</mount>
       <yp>1</yp>
-      <name>Radio Trampa</name>
-      <genre>Pop</genre>
-      <description>Radio en vivo desde un bot de Telegram</description>
+      <name>Pumuky's Radio</name>
+      <genre>Various</genre>
+      <description>Live radio from a Telegram bot</description>
 
       <reconnectdelay>2</reconnectdelay>
       <reconnectattempts>5</reconnectattempts>
-      
-      <!-- 1 para hacerlo público -->
+
+      <!-- 1 to make it public -->
       <public>1</public>
     </instance>
   </stream>
