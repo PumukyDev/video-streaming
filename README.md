@@ -9,6 +9,9 @@ Streaming Server is a self-hosted solution that allows you to download and strea
 ### Interact with the Telegram Bot
 
 - Search for `pumuky_bot` on Telegram or scan the QR code.
+
+<img src="docs/assets/pumukybot.png" align="right" alt="pumuky_bot Telegram bot QR">
+
 - Send a youtube video or audio with `/dv` or `/da` commands.
 - The bot will process the request and provide a streaming link.
 
@@ -17,10 +20,6 @@ Streaming Server is a self-hosted solution that allows you to download and strea
 - Open the streaming link provided by the bot.
 - Choose between video or audio playback with.
 - Start streaming instantly from your browser.
-
-<div align="right">
-    <img src="docs/assets/pumukybot.png" alt="pumuky_bot Telegram bot QR">
-</div>
 
 ## Features
 
