@@ -12,13 +12,13 @@ Streaming Server is a self-hosted solution that allows you to download and strea
 
 <img src="docs/assets/pumukybot.png" align="right" alt="pumuky_bot Telegram bot QR">
 
-- Send a youtube video or audio with `/dv` or `/da` commands.
+- Send a YouTube video or audio link with the `/dv` (for video) or `/da` (for audio) commands.
 - The bot will process the request and provide a streaming link.
 
 ### Access the Web Player
 
 - Open the streaming link provided by the bot.
-- Choose between video or audio playback with.
+- Choose between video or audio playback.
 - Start streaming instantly from your browser.
 
 ## Features
