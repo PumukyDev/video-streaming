@@ -3,18 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HLS Player - Video Selection</title>
+    <title>PumukyTV</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        .video-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .video-button {
+            padding: 12px 30px;
+            background-color: #555;
+            color: white;
+            text-align: center;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            width: 250px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-button:hover {
+            background-color: #444;
+            transform: translateY(-4px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #videoPlayer {
+            display: none;
+            margin-top: 20px;
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        @media (min-width: 600px) {
+            .video-list {
+                flex-direction: row;
+                gap: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
+
     <h1>Select a Video</h1>
-    
-    <!-- Video selector -->
-    <select id="videoSelect">
-        <option value="">Loading videos...</option>
-    </select>
-    
-    <video id="videoPlayer" controls width="640" height="360" style="display: none; margin-top: 20px;"></video>
+
+    <!-- Video buttons -->
+    <div id="videoList" class="video-list">
+        <div class="video-button">Loading videos...</div>
+    </div>
+
+    <!-- Video player -->
+    <video id="videoPlayer" controls></video>
 
     <script>
         async function loadVideoList() {
@@ -36,23 +102,16 @@
                     return;
                 }
 
-                // Fill the selector with videos
-                let select = document.getElementById('videoSelect');
-                select.innerHTML = "<option value=''>Select a video...</option>";
+                // Fill the video list with buttons
+                let videoList = document.getElementById('videoList');
+                videoList.innerHTML = ""; // Clear loading message
 
                 hlsFolders.forEach(folder => {
-                    let option = document.createElement('option');
-                    option.value = `/video/hls/${folder}output.m3u8`;
-                    option.textContent = folder.replace('hls_', 'Video ');
-                    select.appendChild(option);
-                });
-
-                // Listen for changes in selection
-                select.addEventListener('change', function() {
-                    let videoSrc = this.value;
-                    if (videoSrc) {
-                        loadVideo(videoSrc);
-                    }
+                    let button = document.createElement('div');
+                    button.classList.add('video-button');
+                    button.textContent = folder.replace('hls_', 'Video ');
+                    button.onclick = () => loadVideo(`/video/hls/${folder}output.m3u8`);
+                    videoList.appendChild(button);
                 });
 
             } catch (error) {
