@@ -82,6 +82,16 @@ async function downloadAudio(url) {
 
         console.log('Conversion successful:', convertStdout);
 
+        // Delete the original mp3 file
+        fs.unlink(audioOutputPath, (err) => {
+          if (err) {
+            console.error('Error deleting MP3 file:', err);
+          } else {
+            console.log('MP3 file deleted:', audioOutputPath);
+          }
+        });
+
+        // Update list.txt
         fs.appendFile('downloads/audio/list.txt', `/audio/${fileDate}.ogg\n`, (err) => {
           if (err) {
             console.error('Error updating list.txt:', err);
@@ -131,6 +141,16 @@ async function downloadVideo(url) {
             return;
           }
           console.log('Video converted to HLS:', ffmpegStdout);
+
+          // Delete the original MP4 file
+          fs.unlink(videoOutputPath, (err) => {
+            if (err) {
+              console.error('Error deleting MP4 file:', err);
+            } else {
+              console.log('MP4 file deleted:', videoOutputPath);
+            }
+          });
+
           resolve(hlsUrl);
         });
       });
