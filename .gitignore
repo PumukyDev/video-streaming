@@ -1,6 +1,4 @@
 .env
 node_modules/
-downloads/
-hls/
-hls.bak/
+media/
 logs/
