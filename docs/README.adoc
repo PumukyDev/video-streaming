@@ -42,7 +42,7 @@ Before running the server, a few configurations must be set up, including the Te
 
 === Setting Up the Environment
 
-Now, you need to configure environment variables for your server. Create a `.env` file in the root directory of the project. This file will store sensitive information, such as the Telegram bot API token.
+Now, you need to configure environment variables for your server. Create a `.env` file in the telegram-bot directory of the project. This file will store sensitive information, such as the Telegram bot API token.
 
 Example `.env` file:
 [source,ini]
@@ -62,7 +62,7 @@ The Nginx configuration file is already set up for most use cases, but you can a
 
 Once the configuration is complete, you can start the server using Docker Compose. Follow these steps:
 
-1. **Build and start the Docker containers:**
+=== Build and start the Docker containers:
 
 [source,bash]
 ----
@@ -71,11 +71,11 @@ docker-compose up --build -d
 
 The `--build` flag ensures that Docker will rebuild the containers with the latest changes, while the `-d` flag runs the containers in detached mode, meaning they will run in the background.
 
-2. **Verify that everything is working:**
+=== Verify that everything is working:
 
 After starting the containers, open your web browser and navigate to `http://localhost`. If everything is configured correctly, you should see the web interface for the streaming service.
 
-3. **Check the logs (optional):**
+=== Check the logs (optional):
 
 If something goes wrong, you can check the logs of your containers to debug any issues:
 
