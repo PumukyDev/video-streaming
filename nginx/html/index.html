@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Your Content</title>
+    <title>Streaming</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -34,6 +34,12 @@
             width: 250px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: left 15px center;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
         }
 
         .button:hover {
@@ -47,6 +53,16 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        .video-btn {
+            background-image: url('assets/pumukytv.png');
+            background-size: 2.3em 2em;
+        }
+
+        .audio-btn {
+            background-image: url('assets/pumubeats.png');
+            background-size: 2em 2em;
+        }
+
         @media (min-width: 600px) {
             .container {
                 flex-direction: row;
@@ -57,8 +73,8 @@
 </head>
 <body>
     <div class="container">
-        <a href="/video/" class="button">Video</a>
-        <a href="/audio/" class="button">Audio</a>
+        <a href="/video/" class="button video-btn">PumukyTV</a>
+        <a href="/audio/" class="button audio-btn">PumuBeats</a>
     </div>
 </body>
 </html>
