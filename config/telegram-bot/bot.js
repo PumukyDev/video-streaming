@@ -26,7 +26,7 @@ bot.onText(/\/dv (.+)/, async (msg, match) => {
     bot.sendMessage(chatId, 'Processing video...');
     try {
       const hlsUrl = await downloadVideo(url);
-      bot.sendMessage(chatId, `Download and conversion complete! Watch the video at:\n ${hlsUrl}`);
+      bot.sendMessage(chatId, `Download and conversion complete! Watch the video at:\n ${hlsUrl} on VLC, or see all available videos at https://stream.pumukydev.com/video/`);
     } catch (error) {
       bot.sendMessage(chatId, "I can't process the video. Are you sure it's a valid YouTube URL?");
     }
@@ -44,7 +44,7 @@ bot.onText(/\/da (.+)/, async (msg, match) => {
     bot.sendMessage(chatId, 'Processing your audio...');
     try {
       const audioPath = await downloadAudio(url);
-      bot.sendMessage(chatId, 'Download complete!');
+      bot.sendMessage(chatId, 'Download complete! Listen to the playlist at https://stream.pumukydev.com/audio/');
     } catch (error) {
       bot.sendMessage(chatId, "I can't download it, are you sure it's a valid YouTube URL?");
     }
@@ -103,7 +103,7 @@ async function downloadVideo(url) {
     const videoOutputPath = `downloads/video/${timestamp}.mp4`;
     const hlsOutputDir = `downloads/video/hls_${timestamp}`;
     const hlsFile = `output.m3u8`;
-    const hlsUrl = `http://127.0.0.1/hls/hls_${timestamp}/${hlsFile}`;
+    const hlsUrl = `https://stream.pumukydev.com/media/video/hls_${timestamp}/${hlsFile}`;
 
     // Command to download the video
     const downloadCommand = `yt-dlp -f "136+140" -o "${videoOutputPath}" ${url}`;
