@@ -1,1 +1,14 @@
 = Streaming Server
+
+== Introduction
+Streaming Server is a web-based platform that allows users to stream both video and audio directly from their browser. Yout
+
+== Features
+- Stream video and audio files on-demand.
+- Accessible from any modern web browser.
+- Supports HLS (.m3u8) for video streaming.
+
+== How to Use
+1. Open the website: `http://your-streaming-url.com`
+2. Select "Video" or "Audio".
+3. Choose a file from the available options.
