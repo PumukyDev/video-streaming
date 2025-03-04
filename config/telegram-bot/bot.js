@@ -17,6 +17,33 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
   bot.sendMessage(chatId, resp);
 });
 
+// Help command
+bot.onText(/\/help/, (msg) => {
+  const chatId = msg.chat.id;
+  const helpMessage = `
+Available commands:
+
+/da [URL] - Download YouTube audio and add it to the radio
+/dv [URL] - Download and stream a YouTube video
+
+Examples:
+  /da https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  /dv https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  `;
+
+  bot.sendMessage(chatId, helpMessage);
+});
+
+// Handle unknown commands
+bot.on("message", (msg) => {
+  const chatId = msg.chat.id;
+  const text = msg.text;
+
+  if (text.startsWith("/") && !["/da", "/dv", "/help"].some(cmd => text.startsWith(cmd))) {
+    bot.sendMessage(chatId, "Unknown command. Type /help for a list of available commands.");
+  }
+});
+
 // Download Video command configuration
 bot.onText(/\/dv (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
