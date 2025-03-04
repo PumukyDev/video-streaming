@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLS Player - Video Selection</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+    <h1>Select a Video</h1>
+    
+    <!-- Video selector -->
+    <select id="videoSelect">
+        <option value="">Loading videos...</option>
+    </select>
+    
+    <video id="videoPlayer" controls width="640" height="360" style="display: none; margin-top: 20px;"></video>
+
+    <script>
+        async function loadVideoList() {
+            try {
+                let response = await fetch('/video/hls/');
+                let html = await response.text();
+
+                let parser = new DOMParser();
+                let doc = parser.parseFromString(html, 'text/html');
+                let links = Array.from(doc.querySelectorAll('a'));
+
+                // Filter folders starting with 'hls_'
+                let hlsFolders = links
+                    .map(link => link.getAttribute('href'))
+                    .filter(href => href.startsWith('hls_'));
+
+                if (hlsFolders.length === 0) {
+                    alert("No videos found.");
+                    return;
+                }
+
+                // Fill the selector with videos
+                let select = document.getElementById('videoSelect');
+                select.innerHTML = "<option value=''>Select a video...</option>";
+
+                hlsFolders.forEach(folder => {
+                    let option = document.createElement('option');
+                    option.value = `/video/hls/${folder}output.m3u8`;
+                    option.textContent = folder.replace('hls_', 'Video ');
+                    select.appendChild(option);
+                });
+
+                // Listen for changes in selection
+                select.addEventListener('change', function() {
+                    let videoSrc = this.value;
+                    if (videoSrc) {
+                        loadVideo(videoSrc);
+                    }
+                });
+
+            } catch (error) {
+                console.error("Error loading the video list:", error);
+                alert("Could not load the video list.");
+            }
+        }
+
+        function loadVideo(videoSrc) {
+            let video = document.getElementById('videoPlayer');
+            video.style.display = 'block'; // Show the video
+
+            if (Hls.isSupported()) {
+                let hls = new Hls();
+                hls.loadSource(videoSrc);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    video.play();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = videoSrc;
+                video.addEventListener('loadedmetadata', function () {
+                    video.play();
+                });
+            } else {
+                alert("Your browser does not support HLS.");
+            }
+        }
+
+        // Load the video list when the page is loaded
+        document.addEventListener("DOMContentLoaded", loadVideoList);
+    </script>
+</body>
+</html>

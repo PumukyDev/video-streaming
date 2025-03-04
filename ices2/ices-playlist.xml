@@ -29,7 +29,7 @@
       <!-- Information to connect to the Icecast server -->
       <hostname>icecast</hostname>
       <port>8000</port>
-      <password>hackme</password>
+      <password>sourcepass</password>
       <!-- Mount point on the Icecast server -->
       <mount>/radio</mount>
       <yp>1</yp>
