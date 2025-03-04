@@ -16,7 +16,7 @@
     <input>
         <module>playlist</module>
         <param name="type">basic</param>
-        <param name="file">/songs/list.txt</param>
+        <param name="file">/audio/list.txt</param>
         <!-- Random play -->
         <param name="random">0</param>
         <!-- If the playlist is updated, start from the beginning -->

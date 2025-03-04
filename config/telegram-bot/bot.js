@@ -57,8 +57,8 @@ bot.onText(/\/da (.+)/, async (msg, match) => {
 async function downloadAudio(url) {
   return new Promise((resolve, reject) => {
     const fileDate = `${Date.now()}`;
-    const audioOutputPath = `downloads/${fileDate}.mp3`;
-    const oggOutputPath = `downloads/${fileDate}.ogg`;
+    const audioOutputPath = `downloads/audio/${fileDate}.mp3`;
+    const oggOutputPath = `downloads/audio/${fileDate}.ogg`;
 
     // Download the audio in mp3
     const downloadCommand = `yt-dlp -x --audio-format mp3 -o "${audioOutputPath}" ${url}`;
@@ -82,7 +82,7 @@ async function downloadAudio(url) {
 
         console.log('Conversion successful:', convertStdout);
 
-        fs.appendFile('downloads/list.txt', `/songs/${fileDate}.ogg\n`, (err) => {
+        fs.appendFile('downloads/audio/list.txt', `/audio/${fileDate}.ogg\n`, (err) => {
           if (err) {
             console.error('Error updating list.txt:', err);
           } else {
@@ -100,8 +100,8 @@ async function downloadAudio(url) {
 async function downloadVideo(url) {
   return new Promise((resolve, reject) => {
     const timestamp = Date.now();
-    const videoOutputPath = `downloads/${timestamp}.mp4`;
-    const hlsOutputDir = `downloads/hls_${timestamp}`;
+    const videoOutputPath = `downloads/video/${timestamp}.mp4`;
+    const hlsOutputDir = `downloads/video/hls_${timestamp}`;
     const hlsFile = `output.m3u8`;
     const hlsUrl = `http://127.0.0.1/hls/hls_${timestamp}/${hlsFile}`;
 

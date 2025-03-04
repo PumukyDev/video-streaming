@@ -1,0 +1,9 @@
+FROM debian:latest
+
+WORKDIR /etc/ices2
+
+RUN apt-get update && \
+    apt-get install -y ices2 vorbis-tools && \
+    rm -rf /var/lib/apt/lists/*
+
+CMD ["ices2", "/etc/ices2/ices-playlist.xml"]
