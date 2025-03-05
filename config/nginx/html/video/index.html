@@ -93,27 +93,38 @@
                 let doc = parser.parseFromString(html, 'text/html');
                 let links = Array.from(doc.querySelectorAll('a'));
 
-                // Filter folders starting with 'hls_'
-                let hlsFolders = links
+                // Filter for folders
+                let folders = links
                     .map(link => link.getAttribute('href'))
-                    .filter(href => href.startsWith('hls_'));
+                    .filter(href => !href.includes('.') && !href.startsWith('..'));
 
-                if (hlsFolders.length === 0) {
+                if (folders.length === 0) {
                     alert("No videos found.");
                     return;
                 }
 
-                // Fill the video list with buttons
+                // Check if there if a output.m3u8 file in the folder
                 let videoList = document.getElementById('videoList');
-                videoList.innerHTML = ""; // Clear loading message
+                videoList.innerHTML = "";
 
-                hlsFolders.forEach(folder => {
-                    let button = document.createElement('div');
-                    button.classList.add('video-button');
-                    button.textContent = folder.replace('hls_', 'Video ');
-                    button.onclick = () => loadVideo(`/media/video/${folder}output.m3u8`);
-                    videoList.appendChild(button);
-                });
+                for (let folder of folders) {
+                    let videoUrl = `/media/video/${folder}output.m3u8`;
+
+                    // Check if the video exists
+                    let checkResponse = await fetch(videoUrl, { method: 'HEAD' });
+
+                    if (checkResponse.ok) {
+                        let button = document.createElement('div');
+                        button.classList.add('video-button');
+                        button.textContent = decodeURIComponent(folder.replace('/', '').replace(/_/g, ' '));
+                        button.onclick = () => loadVideo(videoUrl);
+                        videoList.appendChild(button);
+                    }
+                }
+
+                if (videoList.innerHTML === "") {
+                    videoList.innerHTML = "<div class='video-button'>No playable videos found.</div>";
+                }
 
             } catch (error) {
                 console.error("Error loading the video list:", error);
@@ -123,7 +134,7 @@
 
         function loadVideo(videoSrc) {
             let video = document.getElementById('videoPlayer');
-            video.style.display = 'block'; // Show the video
+            video.style.display = 'block';
 
             if (Hls.isSupported()) {
                 let hls = new Hls();
@@ -142,7 +153,7 @@
             }
         }
 
-        // Load the video list when the page is loaded
+        // Load the video list
         document.addEventListener("DOMContentLoaded", loadVideoList);
     </script>
 </body>

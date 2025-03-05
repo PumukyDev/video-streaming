@@ -24,11 +24,12 @@ bot.onText(/\/help/, (msg) => {
 Available commands:
 
 /da [URL] - Download YouTube audio and add it to the radio
-/dv [URL] - Download and stream a YouTube video
+/dv [URL] [optional name] - Download and stream a YouTube video
 
 Examples:
   /da https://www.youtube.com/watch?v=dQw4w9WgXcQ
   /dv https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  /dv https://www.youtube.com/watch?v=dQw4w9WgXcQ Never Gonna Give You Up
   `;
 
   bot.sendMessage(chatId, helpMessage);
@@ -45,17 +46,24 @@ bot.on("message", (msg) => {
 });
 
 // Download Video command configuration
-bot.onText(/\/dv (.+)/, async (msg, match) => {
+bot.onText(/\/dv (\S+)(?:\s+(.+))?/, async (msg, match) => {
   const chatId = msg.chat.id;
   const url = match[1];
+  const customName = match[2] ? match[2].replace(/\s+/g, '_') : `video_${Date.now()}`;
+
+  // Limit name length to 25 characters
+  if (customName.length > 25) {
+    bot.sendMessage(chatId, 'The name cannot be longer than 25 characters, please set a shorter name.');
+    return;
+  }
 
   if (isValidUrl(url)) {
     bot.sendMessage(chatId, 'Processing video...');
     try {
-      const hlsUrl = await downloadVideo(url);
+      const hlsUrl = await downloadVideo(url, customName);
       bot.sendMessage(chatId, `Download and conversion complete! Watch the video at:\n ${hlsUrl} on VLC, or see all available videos at https://stream.pumukydev.com/video/`);
     } catch (error) {
-      bot.sendMessage(chatId, "I can't process the video. Are you sure it's a valid YouTube URL?");
+      bot.sendMessage(chatId, `Error processing video: ${error.message || error}`);
     }
   } else {
     bot.sendMessage(chatId, 'The URL is not valid.');
@@ -134,13 +142,12 @@ async function downloadAudio(url) {
 }
 
 // Helper function to download video using yt-dlp and convert to HLS
-async function downloadVideo(url) {
+async function downloadVideo(url, folderName) {
   return new Promise((resolve, reject) => {
-    const timestamp = Date.now();
-    const videoOutputPath = `downloads/video/${timestamp}.mp4`;
-    const hlsOutputDir = `downloads/video/hls_${timestamp}`;
+    const videoOutputPath = `downloads/video/${folderName}.mp4`;
+    const hlsOutputDir = `downloads/video/${folderName}`;
     const hlsFile = `output.m3u8`;
-    const hlsUrl = `https://stream.pumukydev.com/media/video/hls_${timestamp}/${hlsFile}`;
+    const hlsUrl = `https://stream.pumukydev.com/media/video/${folderName}/${hlsFile}`;
 
     // Command to download the video
     const downloadCommand = `yt-dlp -f "136+140" -o "${videoOutputPath}" ${url}`;
@@ -159,7 +166,7 @@ async function downloadVideo(url) {
           return;
         }
 
-        // Command to convert the video to HLS
+        // Convert the video to HLS
         const hlsCommand = `ffmpeg -i "${videoOutputPath}" -codec: copy -start_number 0 -hls_time 10 -hls_list_size 0 -hls_segment_filename "${hlsOutputDir}/segment_%03d.ts" -f hls "${hlsOutputDir}/${hlsFile}"`;
 
         exec(hlsCommand, (ffmpegError, ffmpegStdout, ffmpegStderr) => {
