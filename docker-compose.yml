@@ -8,8 +8,6 @@ services:
       - ./config/telegram-bot:/app
       - ./media:/app/downloads
     command: ["node", "bot.js"]
-    ports:
-      - "5000:5000"
     networks:
       - app_network
 
@@ -28,15 +26,12 @@ services:
   icecast:
     image: libretime/icecast
     container_name: icecast
-    ports:
-      - "8000:8000"
     volumes:
       - ./config/icecast/icecast.xml:/etc/icecast.xml
       - ./config/icecast/logs/error.log:/usr/local/icecast/logs/error.log
       - ./config/icecast/logs/access.log:/usr/local/icecast/logs/access.log
     networks:
       - app_network
-      - proxy-network
 
   ices2:
     build:
